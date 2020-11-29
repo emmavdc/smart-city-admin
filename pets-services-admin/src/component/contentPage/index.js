@@ -4,10 +4,10 @@ import { Switch, Route, Redirect } from "react-router-dom";
 class ContentPage extends React.Component {
 
   render() {
-    const Home = lazy(() => import('../home/Home'));
-    const Users = lazy(() => import('../users/Users'));
-    const Services = lazy(() => import('../services/Services'));
-    const Evaluations = lazy(() => import('../evaluations/Evaluations'));
+    const Home = lazy(() => import('../home'));
+    const Users = lazy(() => import('../users'));
+    const Services = lazy(() => import('../services'));
+    const Evaluations = lazy(() => import('../evaluations'));
 
     const isLogged = sessionStorage.getItem("jwt");
 

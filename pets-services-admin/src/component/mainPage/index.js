@@ -1,7 +1,7 @@
 import React from "react";
-import ContentPage from "../contentPage/ContentPage";
-import Navigation from "../navigation/Navigation";
-import Footer from "../footer/Footer";
+import ContentPage from "../contentPage";
+import Navigation from "../navigation";
+import Footer from "../footer";
 
 class MainPage extends React.Component {
   render() {
