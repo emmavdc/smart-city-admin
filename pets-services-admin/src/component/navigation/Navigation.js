@@ -7,9 +7,9 @@ class Navigation extends React.Component {
     return (
       <div>
         <nav className="navbar navbar-expand bg-dark navbar-dark flex-column flex-md-row bd-navbar">
-          <a className="navbar-brand" href="/main/home">
+          <Link to="/main/home" className="navbar-brand">
             <img src={logo} alt="Logo" className="logoNav" />
-          </a>
+          </Link>
           <ul className="navbar-nav bd-navbar-nav flex-row">
             <li className="nav-item">
               <Link to="/main/home" className="nav-link">

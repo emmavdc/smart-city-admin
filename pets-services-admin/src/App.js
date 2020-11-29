@@ -1,10 +1,11 @@
-import "./App.css";
-import Main from "./component/mainPage/MainPage";
+import React from 'react';
+import './App.css';
+import Router from './routes';
 
 function App() {
   sessionStorage.clear();
   return (
-      <Main></Main>
+      <Router></Router>
     );
 }
 
