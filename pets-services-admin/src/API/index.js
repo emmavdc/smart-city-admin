@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL_API = "http://localhost:5000";
+const BASE_URL_API = "https://pets-services.azurewebsites.net";
 
 const loginModel = {
   password: String,
