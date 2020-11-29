@@ -86,7 +86,7 @@ class Signin extends React.Component {
             onChange={this.handleChange}
           ></input>
           {this.state.errorMessage !== "" ? (
-            <div class="alert alert-warning" role="alert">
+            <div className="alert alert-warning" role="alert">
               {this.state.errorMessage}
             </div>
           ) : null}
