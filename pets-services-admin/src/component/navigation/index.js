@@ -3,7 +3,13 @@ import { Link } from "react-router-dom";
 import logo from "../../assets/logo.svg";
 import "./navigation.css";
 class Navigation extends React.Component {
+
+  handleSignout(event) {
+    sessionStorage.clear();
+  }
+
   render() {
+
     return (
       <div>
         <nav className="navbar navbar-expand bg-dark navbar-dark flex-column flex-md-row bd-navbar">
@@ -30,6 +36,13 @@ class Navigation extends React.Component {
               <Link to="/main/evaluations" className="nav-link">
                 Evaluations
               </Link>
+            </li>
+          </ul>
+          <ul className="navbar-nav bd-navbar-nav flex-row ml-md-auto">
+            <li className="nav-item">
+              <a href="/" onClick={this.handleSignout} className="nav-link">
+                Déconnexion
+              </a>
             </li>
           </ul>
         </nav>
