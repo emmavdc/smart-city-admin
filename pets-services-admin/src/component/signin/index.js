@@ -2,7 +2,8 @@ import React from "react";
 import "./signin.css";
 import logo from "../../assets/logo.svg";
 import { Redirect } from "react-router-dom";
-import { login, loginModel } from "../../API";
+import { login } from "../../API";
+import { loginModel } from "../../API/model";
 
 class Signin extends React.Component {
   constructor() {
