@@ -4,7 +4,8 @@ import SearchBar from "./searchBar";
 class Users extends React.Component {
   constructor() {
     super();
-    this.state = { users: {} };
+    const users = [];
+    this.state = { users: users };
   }
 
   searchUser(filters) {
@@ -12,7 +13,8 @@ class Users extends React.Component {
 
     result
       .then((data) => {
-        this.setState({ users: data });
+        const dataArray = [...data];
+        this.setState({ users: dataArray });
       })
       .catch((e) => {
         this.setState({
@@ -35,7 +37,7 @@ class Users extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {Object.values(this.state.users).map(user => {
+            {this.state.users.map(user => {
               return (
                 <tr key={user.user_id}>
                   <td>{user.lastname}</td>
