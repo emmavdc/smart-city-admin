@@ -3,9 +3,9 @@ class SearchBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchName: "",
-      searchEmail: "",
-      searchLocality: "",
+      lastname: "",
+      email: "",
+      locality: "",
       callback: props.callback,
     };
     this.handleChange = this.handleChange.bind(this);
@@ -20,9 +20,9 @@ class SearchBar extends React.Component {
 
   handleSearch(event) {
     this.state.callback({
-      searchName: this.state.searchName,
-      searchEmail: this.state.searchEmail,
-      searchLocality: this.state.searchLocality,
+      lastname: this.state.lastname,
+      email: this.state.email,
+      locality: this.state.locality,
     });
   }
 
@@ -30,22 +30,29 @@ class SearchBar extends React.Component {
     return (
       <div>
         <input
+          id="inputName"
+          placeholder="Nom"
           type="text"
-          name="searchName"
+          name="lastname"
           onChange={this.handleChange}
         ></input>
         <input
           type="email"
-          name="searchEmail"
+          placeholder="Email"
+          name="email"
           onChange={this.handleChange}
         ></input>
         <input
           type="text"
-          name="searchLocality"
+          placeholder="Localité"
+          name="locality"
           onChange={this.handleChange}
         ></input>
-        <input type="button" onClick={this.handleSearch} value="Chercher">
-        </input>
+        <input
+          type="button"
+          onClick={this.handleSearch}
+          value="Chercher"
+        ></input>
       </div>
     );
   }

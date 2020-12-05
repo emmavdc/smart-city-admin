@@ -16,8 +16,9 @@ const searchUser = async (searchUserModel) => {
     headers: {
       Authorization: "Bearer " + sessionStorage.getItem("jwt"),
     },
+    params: searchUserModel
   };
-  const rep = await axios.get(BASE_URL_API + "/users/", config);
+  const rep = await axios.get(BASE_URL_API + "/users?", config);
   return rep.data;
 };
 
