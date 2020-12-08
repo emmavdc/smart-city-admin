@@ -3,7 +3,6 @@ import "./signin.css";
 import logo from "../../assets/logo.svg";
 import { Redirect } from "react-router-dom";
 import { login } from "../../API";
-import { loginModel } from "../../API/model";
 
 class Signin extends React.Component {
   constructor() {
@@ -24,6 +23,9 @@ class Signin extends React.Component {
     this.setState({ [nam]: val });
   }
   handleSubmit(event) {
+    
+    const loginModel = {};
+
     loginModel.email = this.state.email;
     loginModel.password = this.state.password;
 
@@ -35,7 +37,7 @@ class Signin extends React.Component {
         this.setState({ redirectAfterLogin: true, errorMessage: "" });
       })
       .catch((e) => {
-        if (e.response.status === 401) {
+        if (e.response && e.response.status === 401) {
           this.setState({ errorMessage: "Utilisateur / mot de passe inconnu" });
         } else {
           this.setState({

@@ -25,7 +25,7 @@ class Users extends React.Component {
 
   render() {
     return (
-      <div className="container text-center">
+      <div className="container">
         <br></br>
         <h1>Liste des utilisateurs</h1>
         <br></br>
