@@ -1,19 +1,26 @@
 import React from "react";
 import { addUser } from "../../API";
+import { Redirect } from "react-router-dom";
 
 class AddUser extends React.Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {errorClass: "hidden", redirectAfterLogin: false, errorMessage: ""};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(event) {
     let nam = event.target.name;
-    let val = event.target.value;
+    let val;
+    if (event.target.type === "checkbox") {
+      val = event.target.checked;
+    } else {
+      val = event.target.value;
+    }
     this.setState({ [nam]: val });
   }
+
   handleSubmit(event) {
     const userModel = {
       email: this.state.email,
@@ -33,11 +40,23 @@ class AddUser extends React.Component {
 
     result
       .then((data) => {
-        this.setState({ redirectAfterPost: true, errorMessage: "" });
+        this.setState({ redirectAfterPost: true, errorMessage: "", errorClass: "hidden" });
       })
       .catch((e) => {
-        if (e.response && e.response.status === 401) {
-          this.setState({ errorMessage: "Vous n'avez pas accès" });
+        this.setState({ errorClass: "alert alert-danger"});
+        if (e.response) {
+          switch (e.response.status) {
+            case 401: 
+            this.setState({ errorMessage: "Vous n'avez pas accès" });
+              break;
+            case 409:
+              this.setState({ errorMessage: "User existe déjà (email)" });
+              break;
+            default:
+              this.setState({ errorMessage: e.response.statusText});
+              break;
+          }
+
         } else {
           this.setState({
             errorMessage: "L'application est temporairement hors service",
@@ -49,10 +68,19 @@ class AddUser extends React.Component {
   }
 
   render() {
+    const { redirectAfterPost } = this.state;
+
+    if (redirectAfterPost) {
+      return <Redirect to="/main/users" />;
+    }
     return (
       <div className="container">
         <br></br>
         <h1>Ajouter un utilisateur</h1>
+        <br></br>
+        <div className={this.state.errorClass}>
+        {this.state.errorMessage}
+        </div>
         <br></br>
         <form onSubmit={this.handleSubmit}>
           <div className="form-group">
@@ -236,7 +264,7 @@ class AddUser extends React.Component {
                     type="checkbox"
                     className="form-check-input"
                     id="isAdminCheckBox"
-                    name="isAdminCheckBox"
+                    name="isAdmin"
                     onChange={this.handleChange}
                   ></input>
                   <label className="form-check-label" htmlFor="isAdminCheckBox">

@@ -1,7 +1,7 @@
 import axios from "axios";
 
-//const BASE_URL_API = "https://pets-services.azurewebsites.net";
-const BASE_URL_API = "http://localhost:5000";
+const BASE_URL_API = "https://pets-services.azurewebsites.net";
+//const BASE_URL_API = "http://localhost:5000";
 
 const login = async (loginModel) => {
   const rep = await axios.post(
