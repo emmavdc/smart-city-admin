@@ -6,7 +6,7 @@ class ContentPage extends React.Component {
   render() {
     const Home = lazy(() => import('../home'));
     const Users = lazy(() => import('../users'));
-    const AddUser = lazy(() => import('../users/addUser'));
+    const AddUser = lazy(() => import('../users/addUserForm'));
     const Services = lazy(() => import('../services'));
     const Evaluations = lazy(() => import('../evaluations'));
 

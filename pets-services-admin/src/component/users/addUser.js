@@ -5,22 +5,63 @@ import { Redirect } from "react-router-dom";
 class AddUser extends React.Component {
   constructor() {
     super();
-    this.state = {feedbackClass: "hidden", redirectToUsers: false, feedbackMessage: ""};
+    this.state = {
+      feedbackClass: "hidden",
+      redirectToUsers: false,
+      feedbackMessage: "",
+      notReadyToSend: true,
+    };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
+
+
+
   }
 
   handleChange(event) {
     let nam = event.target.name;
     let val;
+    let feedbackMessage;
+    let feedbackClass;
+    let notReadyToSend;
+
+
     if (event.target.type === "checkbox") {
       val = event.target.checked;
     } else {
       val = event.target.value;
     }
-    this.setState({ [nam]: val, feedbackMessage: "Entrez tous les champs", feedbackClass: "alert alert-info" });
+
+    this.setState({ [nam]: val}, (feedbackMessage, feedbackClass, notReadyToSend) => {
+    if (this.isFormValid()) {
+      feedbackMessage = "Le formulaire est prêt à envoyer";
+      feedbackClass = "alert alert-info";
+      notReadyToSend = false;
+    } else {
+      feedbackMessage = "Entrez tous les champs";
+      feedbackClass = "alert alert-info";
+      notReadyToSend = true;
+    }});
+
+
+    this.setState({ feedbackMessage: feedbackMessage, feedbackClass: feedbackClass, notReadyToSend: notReadyToSend });
   }
+
+  isFormValid()  {
+    const {email, password, firstname, lastname, phone, locality, postalCode, streetNumber, streetName, country} = this.state;
+
+    return email && email !== "" &&
+           password && password !== "" &&
+           firstname && firstname !== "" &&
+           lastname && lastname !== "" &&
+           phone && phone !== "" && 
+           locality && locality !== "" &&
+           postalCode && postalCode !== "" &&
+           streetNumber && streetNumber !== "" && 
+           streetName && streetName !== "" && 
+           country && country !== "" ? true : false;
+  };
 
   handleSubmit(event) {
     const userModel = {
@@ -41,23 +82,25 @@ class AddUser extends React.Component {
 
     result
       .then((data) => {
-        this.setState({ feedbackMessage: "Le user est créé", feedbackClass: "alert alert-success" });
+        this.setState({
+          feedbackMessage: "Le user est créé",
+          feedbackClass: "alert alert-success",
+        });
       })
       .catch((e) => {
-        this.setState({ feedbackClass: "alert alert-danger"});
+        this.setState({ feedbackClass: "alert alert-danger" });
         if (e.response) {
           switch (e.response.status) {
-            case 401: 
-            this.setState({ feedbackMessage: "Vous n'avez pas accès" });
+            case 401:
+              this.setState({ feedbackMessage: "Vous n'avez pas accès" });
               break;
             case 409:
               this.setState({ feedbackMessage: "User existe déjà (email)" });
               break;
             default:
-              this.setState({ feedbackMessage: e.response.statusText});
+              this.setState({ feedbackMessage: e.response.statusText });
               break;
           }
-
         } else {
           this.setState({
             feedbackMessage: "L'application est temporairement hors service",
@@ -68,11 +111,13 @@ class AddUser extends React.Component {
     event.preventDefault();
   }
 
-
   handleCancel(event) {
-    this.setState({ redirectToUsers: true, errorMessage: "", errorClass: "hidden" });
+    this.setState({
+      redirectToUsers: true,
+      errorMessage: "",
+      errorClass: "hidden",
+    });
   }
-
 
   render() {
     const { redirectToUsers } = this.state;
@@ -86,10 +131,10 @@ class AddUser extends React.Component {
         <h1>Ajouter un utilisateur</h1>
         <br></br>
         <div className={this.state.feedbackClass}>
-        {this.state.feedbackMessage}
+          {this.state.feedbackMessage}
         </div>
         <br></br>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit} autoComplete="off">
           <div className="form-group">
             <div className="row">
               <div className="col">
@@ -286,6 +331,7 @@ class AddUser extends React.Component {
             type="submit"
             className="btn btn-primary"
             value="Ajouter"
+            disabled={this.state.notReadyToSend}
           ></input>
           &nbsp;
           <input
