@@ -5,9 +5,10 @@ import { Redirect } from "react-router-dom";
 class AddUser extends React.Component {
   constructor() {
     super();
-    this.state = {errorClass: "hidden", redirectAfterLogin: false, errorMessage: ""};
+    this.state = {feedbackClass: "hidden", redirectToUsers: false, feedbackMessage: ""};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
   }
 
   handleChange(event) {
@@ -18,7 +19,7 @@ class AddUser extends React.Component {
     } else {
       val = event.target.value;
     }
-    this.setState({ [nam]: val });
+    this.setState({ [nam]: val, feedbackMessage: "Entrez tous les champs", feedbackClass: "alert alert-info" });
   }
 
   handleSubmit(event) {
@@ -40,26 +41,26 @@ class AddUser extends React.Component {
 
     result
       .then((data) => {
-        this.setState({ redirectAfterPost: true, errorMessage: "", errorClass: "hidden" });
+        this.setState({ feedbackMessage: "Le user est créé", feedbackClass: "alert alert-success" });
       })
       .catch((e) => {
-        this.setState({ errorClass: "alert alert-danger"});
+        this.setState({ feedbackClass: "alert alert-danger"});
         if (e.response) {
           switch (e.response.status) {
             case 401: 
-            this.setState({ errorMessage: "Vous n'avez pas accès" });
+            this.setState({ feedbackMessage: "Vous n'avez pas accès" });
               break;
             case 409:
-              this.setState({ errorMessage: "User existe déjà (email)" });
+              this.setState({ feedbackMessage: "User existe déjà (email)" });
               break;
             default:
-              this.setState({ errorMessage: e.response.statusText});
+              this.setState({ feedbackMessage: e.response.statusText});
               break;
           }
 
         } else {
           this.setState({
-            errorMessage: "L'application est temporairement hors service",
+            feedbackMessage: "L'application est temporairement hors service",
           });
         }
       });
@@ -67,10 +68,16 @@ class AddUser extends React.Component {
     event.preventDefault();
   }
 
-  render() {
-    const { redirectAfterPost } = this.state;
 
-    if (redirectAfterPost) {
+  handleCancel(event) {
+    this.setState({ redirectToUsers: true, errorMessage: "", errorClass: "hidden" });
+  }
+
+
+  render() {
+    const { redirectToUsers } = this.state;
+
+    if (redirectToUsers) {
       return <Redirect to="/main/users" />;
     }
     return (
@@ -78,8 +85,8 @@ class AddUser extends React.Component {
         <br></br>
         <h1>Ajouter un utilisateur</h1>
         <br></br>
-        <div className={this.state.errorClass}>
-        {this.state.errorMessage}
+        <div className={this.state.feedbackClass}>
+        {this.state.feedbackMessage}
         </div>
         <br></br>
         <form onSubmit={this.handleSubmit}>
@@ -285,6 +292,7 @@ class AddUser extends React.Component {
             type="button"
             className="btn btn-primary"
             value="Annuler"
+            onClick={this.handleCancel}
           ></input>
         </form>
       </div>
