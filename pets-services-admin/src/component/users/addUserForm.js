@@ -33,7 +33,11 @@ class AddUserForm extends React.Component {
           postalCode: "",
           streetNumber: "",
           streetName: "",
-          country: ""
+          country: "",
+          isWalker: false,
+          isHost: false,
+          searchWalker: false,
+          searchHost: false
         }
       }
 
@@ -43,19 +47,51 @@ class AddUserForm extends React.Component {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
         let errors = {};
     
-        if (values.email === "") {
+        if (!values.email) {
           errors.email = "Email est manquant";
         } else if (!emailRegex.test(values.email)) {
           errors.email = "Le format de l'email n'est pas bon";
         }
+
         if (values.password === "") {
           errors.password = "Le mot de passe est manquant";
         } else if (values.password.length < 3) {
           errors.password = "Le mot de passe doit avoir au moins 3 caractères";
         }
+
         if (values.lastname === "") {
             errors.lastname = "Le nom est manquant";
         }  
+
+        if (values.firstname === "") {
+          errors.firstname = "Le prénom est manquant";
+        }  
+
+        if (values.phone === "") {
+          errors.phone = "Le téléphone est manquant";
+        }  
+
+        if (values.locality === "") {
+          errors.locality = "La localité est manquante";
+        }  
+
+        if (values.postalCode === "") {
+          errors.postalCode = "Le code postal est manquant";
+        }  
+
+        if (values.streetName === "") {
+          errors.streetName = "La rue est manquante";
+        }  
+
+        if (values.streetNumber === "") {
+          errors.streetNumber = "Le numéro est manquant";
+        }  
+
+        if (!values.country) {
+          errors.country = "Le pays est manquant";
+        }  
+
+
         return errors;    
       }
 
@@ -73,6 +109,11 @@ class AddUserForm extends React.Component {
       streetNumber: values.streetNumber,
       streetName: values.streetName,
       country: values.country,
+      isWalker: values.isWalker,
+      isHost: values.isHost,
+      searchWalker: values.searchWalker,
+      searchHost: values.searchHost
+
     };
 
     const result = addUser(userModel);
@@ -276,11 +317,16 @@ class AddUserForm extends React.Component {
                 <div className="row">
                   <div className="col">
                   <Field
-                          type="text"
+                          component="select"
                           name="country"
-                          placeholder="Pays"
-                          className={`form-control ${props.errors.country ? "is-invalid" : ""}`}
-                        />
+                          className={`form-select-input ${props.errors.country ? "is-invalid" : ""}`}
+                        >
+                        <option value="">...</option>
+                        <option value="BE">Belgique</option>
+                        <option value="FR">France</option>
+                        <option value="LU">Luxembourg</option>
+                        <option value="NL">Pays Bas</option>
+                  </Field>
                         <ErrorMessage
                           component="div"
                           name="country"
@@ -296,79 +342,90 @@ class AddUserForm extends React.Component {
                     <div className="form-check">
                     <Field
                           type="checkbox"
-                          name="walkCheckBox"
-                          placeholder="Pays"
-                          className={`form-check-input ${props.errors.walkCheckBox ? "is-invalid" : ""}`}
+                          name="isWalker"
+                          className={`form-check-input ${props.errors.isWalker ? "is-invalid" : ""}`}
                         />
                         <ErrorMessage
                           component="div"
-                          name="walkCheckBox"
+                          name="isWalker"
                           className="invalid-feedback"
                         />                         
                       <label
                         className="form-check-label"
-                        htmlFor="walkCheckBox"
+                        htmlFor="isWalker"
                       >
                         Je promène
                       </label>
                     </div>
                     <div className="form-check">
-                      <input
-                        type="checkbox"
-                        className="form-check-input"
-                        name="keepCheckBox"
-                        id="keepCheckBox"
-                        onChange={this.handleChange}
-                      ></input>
+                    <Field
+                          type="checkbox"
+                          name="isHost"
+                          className={`form-check-input ${props.errors.isHost ? "is-invalid" : ""}`}
+                        />
+                        <ErrorMessage
+                          component="div"
+                          name="isHost"
+                          className="invalid-feedback"
+                        />   
                       <label
                         className="form-check-label"
-                        htmlFor="keepCheckBox"
+                        htmlFor="isHost"
                       >
                         Je garde
                       </label>
                     </div>
                     <div className="form-check">
-                      <input
-                        type="checkbox"
-                        className="form-check-input"
-                        name="searchWalkerCheckBox"
-                        id="searchWalkerCheckBox"
-                        onChange={this.handleChange}
-                      ></input>
+                    <Field
+                          type="checkbox"
+                          name="searchWalker"
+                          className={`form-check-input ${props.errors.searchWalk ? "is-invalid" : ""}`}
+                        />
+                        <ErrorMessage
+                          component="div"
+                          name="searchWalker"
+                          className="invalid-feedback"
+                        />   
                       <label
                         className="form-check-label"
-                        htmlFor="searchWalkerCheckBox"
+                        htmlFor="searchWalker"
                       >
                         Je cherche un promeneur
                       </label>
                     </div>
                     <div className="form-check">
-                      <input
-                        type="checkbox"
-                        className="form-check-input"
-                        id="searchHostCheckBox"
-                        name="searchHostCheckBox"
-                        onChange={this.handleChange}
-                      ></input>
+                    <Field
+                          type="checkbox"
+                          name="searchHost"
+                          className={`form-check-input ${props.errors.searchHost ? "is-invalid" : ""}`}
+                        />
+                        <ErrorMessage
+                          component="div"
+                          name="searchHost"
+                          className="invalid-feedback"
+                        />                        
                       <label
                         className="form-check-label"
-                        htmlFor="searchHostCheckBox"
+                        htmlFor="searchHost"
                       >
                         Je cherche un hôte
                       </label>
                     </div>
                     <br></br>
                     <div className="form-check">
-                      <input
-                        type="checkbox"
-                        className="form-check-input"
-                        id="isAdminCheckBox"
-                        name="isAdmin"
-                        onChange={this.handleChange}
-                      ></input>
+                    <Field
+                          type="checkbox"
+                          name="isAdmin"
+                          className={`form-check-input ${props.errors.isAdmin ? "is-invalid" : ""}`}
+                        />
+                        <ErrorMessage
+                          component="div"
+                          name="isAdmin"
+                          className="invalid-feedback"
+                        />                                     
                       <label
                         className="form-check-label"
-                        htmlFor="isAdminCheckBox"
+                        htmlFor="isAdmin"
                       >
                         Administateur
                       </label>
