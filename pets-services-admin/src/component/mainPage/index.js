@@ -1,7 +1,6 @@
 import React from "react";
 import ContentPage from "../contentPage";
 import Navigation from "../navigation";
-import Footer from "../footer";
 
 class MainPage extends React.Component {
   render() {
@@ -14,9 +13,6 @@ class MainPage extends React.Component {
           <main>
             <ContentPage></ContentPage>
           </main>
-          <footer>
-            <Footer></Footer>
-          </footer>
       </div>
     );
   }

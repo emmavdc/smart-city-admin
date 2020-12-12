@@ -156,7 +156,7 @@ class AddUserForm extends React.Component {
       return <Redirect to="/main/users" />;
     }
     return (
-      <div className="container">
+      <div>
         <br></br>
         <h1>Ajouter un utilisateur</h1>
         <br></br>
@@ -333,10 +333,10 @@ class AddUserForm extends React.Component {
                       }`}
                     >
                       <option value="">...</option>
-                      <option value="BE">Belgique</option>
-                      <option value="FR">France</option>
-                      <option value="LU">Luxembourg</option>
-                      <option value="NL">Pays Bas</option>
+                      <option>Belgique</option>
+                      <option>France</option>
+                      <option>Luxembourg</option>
+                      <option>Pays Bas</option>
                     </Field>
                     <ErrorMessage
                       component="div"
