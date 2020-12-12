@@ -1,7 +1,7 @@
 import axios from "axios";
 
-//const BASE_URL_API = "https://pets-services.azurewebsites.net";
-const BASE_URL_API = "http://localhost:5000";
+const BASE_URL_API = "https://pets-services.azurewebsites.net";
+//const BASE_URL_API = "http://localhost:5000";
 
 const login = async (loginModel) => {
   const rep = await axios.post(
@@ -32,4 +32,13 @@ const addUser = async (userModel) => {
   return rep.data;
 };
 
-export { login, searchUser, addUser };
+const deleteUser = async (userId) => {
+  const config = {
+    headers: {
+      Authorization: "Bearer " + sessionStorage.getItem("jwt"),
+    }
+  };
+ return await axios.delete(BASE_URL_API + `/users/${userId}`, config);
+};
+
+export { login, searchUser, addUser, deleteUser };

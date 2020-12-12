@@ -1,5 +1,5 @@
 import React from "react";
-import { searchUser } from "../../API";
+import { searchUser, deleteUser } from "../../API";
 import OptionsBar from "./optionsBar";
 class Users extends React.Component {
   constructor() {
@@ -18,12 +18,33 @@ class Users extends React.Component {
       })
       .catch((e) => {
         this.setState({
-          errorMessage: "Erreur de récupération des utilisateurs.",
+          feedbackMessage: "Erreur de récupération des utilisateurs",
         });
       });
   }
 
+
+   removeUser(userId)  {
+
+    const result = deleteUser(userId);
+
+    result
+      .then(() => {
+        const usersToRefresh = this.state.users;
+        const afterFiltering = usersToRefresh.filter(user => user.user_id !== userId);
+        this.setState({users: afterFiltering});
+      })
+      .catch((e) => {
+        this.setState({
+          feedbackMessage: "Erreur lors de la suppression",
+        });
+      });
+  }
+
+
+
   render() {
+
     return (
       <div className="container">
         <br></br>
@@ -42,8 +63,8 @@ class Users extends React.Component {
                 <th>Prénom</th>
                 <th>Adresse mail</th>
                 <th>Localité</th>
-                <th>Offreur</th>
                 <th>Demandeur</th>
+                <th>Offreur</th>
                 <th></th>
                 <th></th>
               </tr>
@@ -89,7 +110,7 @@ class Users extends React.Component {
                       </button>
                     </td>
                     <td className="text-center">
-                      <button type="button" className="btn">
+                      <button className="btn" onClick={()=>this.removeUser(user.user_id)}>
                         <svg
                           width="1em"
                           height="1em"
