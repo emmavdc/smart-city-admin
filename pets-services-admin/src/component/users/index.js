@@ -1,11 +1,17 @@
 import React from "react";
 import { searchUser, deleteUser } from "../../API";
 import OptionsBar from "./optionsBar";
+import { Modal, Button } from "react-bootstrap";
+
 class Users extends React.Component {
   constructor() {
     super();
     const users = [];
-    this.state = { users: users };
+    this.state = {
+      users: users,
+      userToDelete: null,
+      showPopupConfirmDelete: false
+    };
   }
 
   searchUser(filters) {
@@ -23,30 +29,62 @@ class Users extends React.Component {
       });
   }
 
+  removeUser(user) {
 
-   removeUser(userId)  {
+      const result = deleteUser(user.user_id);
 
-    const result = deleteUser(userId);
-
-    result
-      .then(() => {
-        const usersToRefresh = this.state.users;
-        const afterFiltering = usersToRefresh.filter(user => user.user_id !== userId);
-        this.setState({users: afterFiltering});
-      })
-      .catch((e) => {
-        this.setState({
-          feedbackMessage: "Erreur lors de la suppression",
+      result
+        .then(() => {
+          const usersToRefresh = this.state.users;
+          const afterFiltering = usersToRefresh.filter(
+            (u) => u.user_id !== user.user_id
+          );
+          this.setState({ users: afterFiltering });
+        })
+        .catch((e) => {
+          this.setState({
+            feedbackMessage: "Erreur lors de la suppression",
+          });
         });
-      });
+
   }
 
+  handleAskDeleteConfirmPopup (user) {
+    this.setState({ showPopupConfirmDelete: true, userToDelete: user });
+  }
 
+  handleCloseDeleteConfirmPopup () {
+    this.setState({ showPopupConfirmDelete: false, userToDelete: null });
+  }
+
+  handleDeleteConfirmPopup () {
+      this.removeUser(this.state.userToDelete);
+      this.setState({ showPopupConfirmDelete: false, userToDelete: null });
+    }
 
   render() {
 
     return (
       <div className="container">
+
+        <Modal show={this.state.showPopupConfirmDelete} 
+               onHide={()=>this.handleCloseDeleteConfirmPopup()}
+               backdrop="static"
+               animation={false}>
+          <Modal.Header closeButton>
+            <Modal.Title>Supprimer le user</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            <p>Êtes vous certains de vouloir supprimer ?</p>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button variant="secondary" onClick={()=>this.handleCloseDeleteConfirmPopup()}>Non</Button>
+            <Button variant="primary" onClick={()=>this.handleDeleteConfirmPopup()}>Oui</Button>
+          </Modal.Footer>
+        </Modal>
+
         <br></br>
         <h1>Liste des utilisateurs</h1>
         <br></br>
@@ -110,7 +148,10 @@ class Users extends React.Component {
                       </button>
                     </td>
                     <td className="text-center">
-                      <button className="btn" onClick={()=>this.removeUser(user.user_id)}>
+                      <button
+                        className="btn"
+                        onClick={() => this.handleAskDeleteConfirmPopup(user)}
+                      >
                         <svg
                           width="1em"
                           height="1em"
