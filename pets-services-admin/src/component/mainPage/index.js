@@ -1,5 +1,5 @@
 import React from "react";
-import ContentPage from "../contentPage";
+import Content from "../content";
 import Navigation from "../navigation";
 
 class MainPage extends React.Component {
@@ -11,7 +11,7 @@ class MainPage extends React.Component {
              <Navigation></Navigation>
              </header>
           <main>
-            <ContentPage></ContentPage>
+            <Content></Content>
           </main>
       </div>
     );

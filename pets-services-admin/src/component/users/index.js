@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 import { searchUser, deleteUser } from "../../API";
 import OptionsBar from "./optionsBar";
 import { Modal, Button } from "react-bootstrap";
@@ -72,11 +73,11 @@ class Users extends React.Component {
                backdrop="static"
                animation={false}>
           <Modal.Header closeButton>
-            <Modal.Title>Supprimer le user</Modal.Title>
+            <Modal.Title>Supprimer l'utilisateur</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
-            <p>Êtes vous certains de vouloir supprimer ?</p>
+            <p>{`Êtes vous certains de vouloir supprimer ${this.state.userToDelete?.firstname} ${this.state.userToDelete?.lastname} ?`}</p>
           </Modal.Body>
 
           <Modal.Footer>
@@ -94,7 +95,7 @@ class Users extends React.Component {
         />
         <br></br>
         {this.state.users.length > 0 && (
-          <table className="container">
+          <table className="container table table-striped">
             <thead>
               <tr>
                 <th>Nom</th>
@@ -130,7 +131,7 @@ class Users extends React.Component {
                       />
                     </td>
                     <td className="text-center">
-                      <button type="button" className="btn">
+                      <Link className="btn" to={`/main/users/${user.user_id}`}> 
                         <svg
                           width="1em"
                           height="1em"
@@ -145,7 +146,7 @@ class Users extends React.Component {
                             d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
                           ></path>
                         </svg>
-                      </button>
+                      </Link>
                     </td>
                     <td className="text-center">
                       <button

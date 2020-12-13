@@ -1,12 +1,12 @@
 import React, { Suspense, lazy } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 
-class ContentPage extends React.Component {
+class Content extends React.Component {
 
   render() {
     const Home = lazy(() => import('../home'));
     const Users = lazy(() => import('../users'));
-    const AddUser = lazy(() => import('../users/addUserForm'));
+    const UserForm = lazy(() => import('../users/userForm'));
     const Services = lazy(() => import('../services'));
     const Evaluations = lazy(() => import('../evaluations'));
 
@@ -24,7 +24,8 @@ class ContentPage extends React.Component {
             <Suspense fallback={<div>Chargement...</div>}>
               <Switch>
                 <Route path="/main/home" component={Home}></Route>
-                <Route path="/main/users/add" component={AddUser}></Route>
+                <Route path="/main/users/add" component={UserForm}></Route>
+                <Route path="/main/users/:id" component={UserForm}></Route>
                 <Route path="/main/users" component={Users}></Route>
                 <Route path="/main/services" component={Services}></Route>
                 <Route path="/main/evaluations" component={Evaluations}></Route>
@@ -36,4 +37,4 @@ class ContentPage extends React.Component {
     );
   }
 }
-export default ContentPage;
+export default Content;

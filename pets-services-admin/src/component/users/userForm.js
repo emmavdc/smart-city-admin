@@ -1,41 +1,89 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import React from "react";
-import { addUser } from "../../API";
-import { Redirect } from "react-router-dom";
+import { addUser, getUser, updateUser } from "../../API";
+import { Link, } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 
-class AddUserForm extends React.Component {
-  constructor() {
-    super();
+class UserForm extends React.Component {
+  constructor(props) {
+    super(props);
+
+    if (this.props.match.params.id) {
+      const result = getUser(this.props.match.params.id);
+
+      result
+        .then((user) => {
+          this.setState({ userToUpdate: user });
+        })
+        .catch((e) => {
+          this.setState({ feedbackClass: "alert alert-danger" });
+          if (e.response) {
+            switch (e.response.status) {
+              case 401:
+                this.setState({ feedbackMessage: "Vous n'avez pas accès" });
+                break;
+              default:
+                this.setState({ feedbackMessage: e.response.statusText });
+                break;
+            }
+          } else {
+            this.setState({
+              feedbackMessage: "L'application est temporairement hors service",
+            });
+          }
+        });
+    }
+
+
     this.state = {
+      isUpdateMode: this.props.match.params.id,
       feedbackClass: "hidden",
-      redirectToUsers: false,
       feedbackMessage: "",
       notReadyToSend: true,
+      userToUpdate: null,
     };
-
-    this.handleCancel = this.handleCancel.bind(this);
   }
 
   initialValues() {
-    return {
-      disabledSubmit: true,
-      email: "",
-      password: "",
-      firstname: "",
-      lastname: "",
-      phone: "",
-      isAdmin: false,
-      locality: "",
-      postalCode: "",
-      streetNumber: "",
-      streetName: "",
-      country: "",
-      isWalker: false,
-      isHost: false,
-      searchWalker: false,
-      searchHost: false,
-    };
+    const userToUpdate = this.state.userToUpdate;
+
+    if (userToUpdate) {
+      return {
+        disabledSubmit: true,
+        email: userToUpdate.email,
+        password: "",
+        firstname: userToUpdate.firstname,
+        lastname: userToUpdate.lastname,
+        phone: userToUpdate.phone,
+        isAdmin: userToUpdate.is_admin,
+        locality: userToUpdate.locality,
+        postalCode: userToUpdate.postal_code,
+        streetNumber: userToUpdate.street_number,
+        streetName: userToUpdate.street_name,
+        country: userToUpdate.country,
+        isWalker: userToUpdate.is_walker,
+        isHost: userToUpdate.is_host,
+        searchWalker: userToUpdate.search_walker,
+        searchHost: userToUpdate.search_host,
+      };
+    } else
+      return {
+        disabledSubmit: true,
+        email: "",
+        password: "",
+        firstname: "",
+        lastname: "",
+        phone: "",
+        isAdmin: false,
+        locality: "",
+        postalCode: "",
+        streetNumber: "",
+        streetName: "",
+        country: "",
+        isWalker: false,
+        isHost: false,
+        searchWalker: false,
+        searchHost: false,
+      };
   }
 
   validate(values) {
@@ -92,6 +140,7 @@ class AddUserForm extends React.Component {
 
   handleSubmit(values) {
     const userModel = {
+      userId: this.props.match.params.id,
       email: values.email,
       password: values.password,
       firstname: values.firstname,
@@ -103,16 +152,23 @@ class AddUserForm extends React.Component {
       streetNumber: values.streetNumber,
       streetName: values.streetName,
       country: values.country,
-      customer: (values.searchWalker || values.searchHost) ? {searchWalker: values.searchWalker, searchHost: values.searchHost}: null,
-      supplier: (values.isHost || values.isWalker) ? {isHost: values.isHost, isAnimalWalker: values.isWalker} : null
+      customer:
+        values.searchWalker || values.searchHost
+          ? { searchWalker: values.searchWalker, searchHost: values.searchHost }
+          : null,
+      supplier:
+        values.isHost || values.isWalker
+          ? { isHost: values.isHost, isAnimalWalker: values.isWalker }
+          : null,
     };
 
-    const result = addUser(userModel);
+    if (this.state.isUpdateMode) {
 
-    result
+      const result = updateUser(userModel);
+      result
       .then(() => {
         this.setState({
-          feedbackMessage: "Le user est créé",
+          feedbackMessage: "L'utilisateur est modifié",
           feedbackClass: "alert alert-success",
         });
       })
@@ -121,13 +177,13 @@ class AddUserForm extends React.Component {
         if (e.response) {
           switch (e.response.status) {
             case 400:
-              this.setState({ feedbackMessage: "Il y a un problème dans le contenu de la requête envoyée" });
+              this.setState({
+                feedbackMessage:
+                  "Il y a un problème dans le contenu de la requête envoyée",
+              });
               break;
             case 401:
               this.setState({ feedbackMessage: "Vous n'avez pas accès" });
-              break;
-            case 409:
-              this.setState({ feedbackMessage: "User existe déjà (email)" });
               break;
             default:
               this.setState({ feedbackMessage: e.response.statusText });
@@ -139,32 +195,59 @@ class AddUserForm extends React.Component {
           });
         }
       });
-  }
 
-  handleCancel() {
-    this.setState({
-      redirectToUsers: true,
-      errorMessage: "",
-      errorClass: "hidden",
-    });
+    }
+    else {
+    
+    const result = addUser(userModel);
+    result
+      .then(() => {
+        this.setState({
+          feedbackMessage: "L'utilisateur est créé",
+          feedbackClass: "alert alert-success",
+        });
+      })
+      .catch((e) => {
+        this.setState({ feedbackClass: "alert alert-danger" });
+        if (e.response) {
+          switch (e.response.status) {
+            case 400:
+              this.setState({
+                feedbackMessage:
+                  "Il y a un problème dans le contenu de la requête envoyée",
+              });
+              break;
+            case 401:
+              this.setState({ feedbackMessage: "Vous n'avez pas accès" });
+              break;
+            case 409:
+              this.setState({ feedbackMessage: "l'utilisateur existe déjà (email)" });
+              break;
+            default:
+              this.setState({ feedbackMessage: e.response.statusText });
+              break;
+          }
+        } else {
+          this.setState({
+            feedbackMessage: "L'application est temporairement hors service",
+          });
+        }
+      });
+    }
   }
 
   render() {
-    const { redirectToUsers } = this.state;
-
-    if (redirectToUsers) {
-      return <Redirect to="/main/users" />;
-    }
     return (
       <div>
         <br></br>
-        <h1>Ajouter un utilisateur</h1>
+        <h1>{this.state.isUpdateMode? "Modifier " : "Ajouter " } un utilisateur</h1>
         <br></br>
         <div className={this.state.feedbackClass}>
           {this.state.feedbackMessage}
         </div>
         <br></br>
         <Formik
+          enableReinitialize
           initialValues={this.initialValues()}
           validate={this.validate.bind(this)}
           onSubmit={async (values) => {
@@ -454,12 +537,9 @@ class AddUserForm extends React.Component {
                 }
               ></input>
               &nbsp;
-              <input
-                type="button"
-                className="btn btn-primary"
-                value="Annuler"
-                onClick={this.handleCancel}
-              ></input>
+              <Link to="/main/users" className="btn btn-primary">
+                Annuler
+              </Link>
             </Form>
           )}
         </Formik>
@@ -467,4 +547,4 @@ class AddUserForm extends React.Component {
     );
   }
 }
-export default AddUserForm;
+export default UserForm;
