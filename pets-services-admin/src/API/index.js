@@ -1,7 +1,7 @@
 import axios from "axios";
 
 //const BASE_URL_API = "https://pets-services.azurewebsites.net";
-const BASE_URL_API = "http://localhost:5000";
+const BASE_URL_API = "http://localhost:8080";
 
 const login = async (loginModel) => {
   const rep = await axios.post(
@@ -61,4 +61,15 @@ const deleteUser = async (userId) => {
  return await axios.delete(BASE_URL_API + `/users/${userId}`, config);
 };
 
-export { login, searchUser, addUser, deleteUser, getUser, updateUser };
+const searchServicesHours = async(searchServicesHoursModel) =>{
+  const config = {
+    headers:{
+      Authorization: "Bearer " + sessionStorage.getItem("jwt"),
+    },
+    params : searchServicesHoursModel
+  };
+  const rep = await axios.get(BASE_URL_API + '/serviceshours?', config);
+  return rep.data;
+};
+
+export { login, searchUser, addUser, deleteUser, getUser, updateUser, searchServicesHours };

@@ -1,4 +1,5 @@
 import React from "react";
+import {searchServicesHours} from "../../API";  
 class Services extends React.Component {
 
   render() {
