@@ -72,4 +72,13 @@ const searchServicesHours = async(searchServicesHoursModel) =>{
   return rep.data;
 };
 
-export { login, searchUser, addUser, deleteUser, getUser, updateUser, searchServicesHours };
+const deleteServiceHours = async(serviceHoursId) =>{
+  const config = {
+    headers: {
+      Authorization: "Bearer " + sessionStorage.getItem("jwt"),
+    }
+  };
+ return await axios.delete(BASE_URL_API + `/servicesHours/${serviceHoursId}`, config);
+};
+
+export { login, searchUser, addUser, deleteUser, getUser, updateUser, searchServicesHours, deleteServiceHours };
