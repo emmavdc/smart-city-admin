@@ -7,6 +7,19 @@ class UserForm extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      isUpdateMode: this.props.match.params.id,
+      feedbackClass: "hidden",
+      feedbackMessage: "",
+      notReadyToSend: true,
+      userToUpdate: null,
+    };
+  }
+
+
+
+  componentDidMount() {
+
     if (this.props.match.params.id) {
       const result = getUser(this.props.match.params.id);
 
@@ -33,15 +46,8 @@ class UserForm extends React.Component {
         });
     }
 
-
-    this.state = {
-      isUpdateMode: this.props.match.params.id,
-      feedbackClass: "hidden",
-      feedbackMessage: "",
-      notReadyToSend: true,
-      userToUpdate: null,
-    };
   }
+
 
   initialValues() {
     const userToUpdate = this.state.userToUpdate;
