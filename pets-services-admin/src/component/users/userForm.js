@@ -16,8 +16,6 @@ class UserForm extends React.Component {
     };
   }
 
-
-
   componentDidMount() {
 
     if (this.props.match.params.id) {
@@ -60,7 +58,7 @@ class UserForm extends React.Component {
         firstname: userToUpdate.firstname,
         lastname: userToUpdate.lastname,
         phone: userToUpdate.phone,
-        isAdmin: userToUpdate.is_admin,
+        isAdmin: false,
         locality: userToUpdate.locality,
         postalCode: userToUpdate.postal_code,
         streetNumber: userToUpdate.street_number,
@@ -152,7 +150,7 @@ class UserForm extends React.Component {
       firstname: values.firstname,
       lastname: values.lastname,
       phone: values.phone,
-      isAdmin: values.isAdmin,
+      isAdmin: false,
       locality: values.locality,
       postalCode: values.postalCode,
       streetNumber: values.streetNumber,
@@ -505,23 +503,6 @@ class UserForm extends React.Component {
                       </label>
                     </div>
                     <br></br>
-                    <div className="form-check">
-                      <Field
-                        type="checkbox"
-                        name="isAdmin"
-                        className={`form-check-input ${
-                          props.errors.isAdmin ? "is-invalid" : ""
-                        }`}
-                      />
-                      <ErrorMessage
-                        component="div"
-                        name="isAdmin"
-                        className="invalid-feedback"
-                      />
-                      <label className="form-check-label" htmlFor="isAdmin">
-                        Administateur
-                      </label>
-                    </div>
                   </div>
                   <div className="col"></div>
                 </div>
