@@ -60,7 +60,7 @@ class UserForm extends React.Component {
         streetNumber: userToUpdate.street_number,
         streetName: userToUpdate.street_name,
         country: userToUpdate.country,
-        isWalker: userToUpdate.is_walker,
+        isWalker: userToUpdate.is_animal_walker,
         isHost: userToUpdate.is_host,
         searchWalker: userToUpdate.search_walker,
         searchHost: userToUpdate.search_host,
@@ -152,14 +152,8 @@ class UserForm extends React.Component {
       streetNumber: values.streetNumber,
       streetName: values.streetName,
       country: values.country,
-      customer:
-        values.searchWalker || values.searchHost
-          ? { searchWalker: values.searchWalker, searchHost: values.searchHost }
-          : null,
-      supplier:
-        values.isHost || values.isWalker
-          ? { isHost: values.isHost, isAnimalWalker: values.isWalker }
-          : null,
+      customer: { searchWalker: values.searchWalker, searchHost: values.searchHost },
+      supplier: { isHost: values.isHost, isAnimalWalker: values.isWalker }
     };
 
     if (this.state.isUpdateMode) {
@@ -529,7 +523,7 @@ class UserForm extends React.Component {
               <input
                 type="submit"
                 className="btn btn-primary"
-                value="Ajouter"
+                value={this.state.isUpdateMode? "Modifier " : "Ajouter " }
                 disabled={
                   props.values.disabledSubmit ||
                   props.isSubmitting ||

@@ -38,7 +38,7 @@ const updateUser = async (userModel) => {
       Authorization: "Bearer " + sessionStorage.getItem("jwt"),
     }
   };
-  const rep = await axios.put(BASE_URL_API + `/users/${userModel.userId}`, userModel, config);
+  const rep = await axios.patch(BASE_URL_API + `/users/${userModel.userId}`, userModel, config);
   return rep.data;
 };
 
