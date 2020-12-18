@@ -119,7 +119,7 @@ class Services extends React.Component {
                     <td className="text-center">
                       <button
                         className="btn"
-                        onClick={() => this.handleAskDeleteConfirmPopup(service  )}
+                        onClick={() => this.handleAskDeleteConfirmPopup(service)}
                       >
                         <svg
                           width="1em"
