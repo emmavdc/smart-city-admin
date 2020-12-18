@@ -7,6 +7,17 @@ class UserForm extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      isUpdateMode: this.props.match.params.id,
+      feedbackClass: "hidden",
+      feedbackMessage: "",
+      notReadyToSend: true,
+      userToUpdate: null,
+    };
+  }
+
+  componentDidMount() {
+
     if (this.props.match.params.id) {
       const result = getUser(this.props.match.params.id);
 
@@ -33,15 +44,8 @@ class UserForm extends React.Component {
         });
     }
 
-
-    this.state = {
-      isUpdateMode: this.props.match.params.id,
-      feedbackClass: "hidden",
-      feedbackMessage: "",
-      notReadyToSend: true,
-      userToUpdate: null,
-    };
   }
+
 
   initialValues() {
     const userToUpdate = this.state.userToUpdate;
@@ -54,13 +58,13 @@ class UserForm extends React.Component {
         firstname: userToUpdate.firstname,
         lastname: userToUpdate.lastname,
         phone: userToUpdate.phone,
-        isAdmin: userToUpdate.is_admin,
+        isAdmin: false,
         locality: userToUpdate.locality,
         postalCode: userToUpdate.postal_code,
         streetNumber: userToUpdate.street_number,
         streetName: userToUpdate.street_name,
         country: userToUpdate.country,
-        isWalker: userToUpdate.is_walker,
+        isWalker: userToUpdate.is_animal_walker,
         isHost: userToUpdate.is_host,
         searchWalker: userToUpdate.search_walker,
         searchHost: userToUpdate.search_host,
@@ -146,20 +150,14 @@ class UserForm extends React.Component {
       firstname: values.firstname,
       lastname: values.lastname,
       phone: values.phone,
-      isAdmin: values.isAdmin,
+      isAdmin: false,
       locality: values.locality,
       postalCode: values.postalCode,
       streetNumber: values.streetNumber,
       streetName: values.streetName,
       country: values.country,
-      customer:
-        values.searchWalker || values.searchHost
-          ? { searchWalker: values.searchWalker, searchHost: values.searchHost }
-          : null,
-      supplier:
-        values.isHost || values.isWalker
-          ? { isHost: values.isHost, isAnimalWalker: values.isWalker }
-          : null,
+      customer: { searchWalker: values.searchWalker, searchHost: values.searchHost },
+      supplier: { isHost: values.isHost, isAnimalWalker: values.isWalker }
     };
 
     if (this.state.isUpdateMode) {
@@ -505,23 +503,6 @@ class UserForm extends React.Component {
                       </label>
                     </div>
                     <br></br>
-                    <div className="form-check">
-                      <Field
-                        type="checkbox"
-                        name="isAdmin"
-                        className={`form-check-input ${
-                          props.errors.isAdmin ? "is-invalid" : ""
-                        }`}
-                      />
-                      <ErrorMessage
-                        component="div"
-                        name="isAdmin"
-                        className="invalid-feedback"
-                      />
-                      <label className="form-check-label" htmlFor="isAdmin">
-                        Administateur
-                      </label>
-                    </div>
                   </div>
                   <div className="col"></div>
                 </div>
@@ -529,7 +510,7 @@ class UserForm extends React.Component {
               <input
                 type="submit"
                 className="btn btn-primary"
-                value="Ajouter"
+                value={this.state.isUpdateMode? "Modifier " : "Ajouter " }
                 disabled={
                   props.values.disabledSubmit ||
                   props.isSubmitting ||

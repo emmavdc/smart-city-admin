@@ -64,13 +64,13 @@ class Signin extends React.Component {
             Veuillez vous connecter
           </h1>
           <label htmlFor="inputEmail" className="sr-only">
-            Addresse mail
+            Adresse mail
           </label>
           <input
             type="email"
             id="inputEmail"
             className="form-control"
-            placeholder="Addresse mail"
+            placeholder="Adresse mail"
             required=""
             autoFocus=""
             name="email"

@@ -19,12 +19,12 @@ class Navigation extends React.Component {
           <ul className="navbar-nav bd-navbar-nav flex-row">
             <li className="nav-item">
               <Link to="/main/home" className="nav-link">
-                Home
+                Accueil
               </Link>
             </li>
             <li className="nav-item">
               <Link to="/main/users" className="nav-link">
-                Users
+                Utilisateurs
               </Link>
             </li>
             <li className="nav-item">
