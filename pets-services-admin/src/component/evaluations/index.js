@@ -2,6 +2,7 @@ import React from "react";
 import {searchRankings, deleteRanking} from "../../API";
 import OptionsBar from "./optionsBar"; 
 import { Modal, Button } from "react-bootstrap";
+import StarRatings from "react-star-ratings";
 class Evaluations extends React.Component {
 
   constructor() {
@@ -112,7 +113,16 @@ class Evaluations extends React.Component {
                     <td>{ranking.customer_firstname}</td>
                     <td>{ranking.supplier_lastname}</td>
                     <td>{ranking.supplier_firstname}</td>
-                    <td>{ranking.number_of_stars}</td>
+                    <td>
+                      <StarRatings
+                        rating={ranking.number_of_stars}
+                        starRatedColor="#0071b9"
+                        numberOfStars={5}
+                        name='rating'
+                        starDimension="20px"
+                        starSpacing="2px"
+                      />
+                    </td>
                     <td>{ranking.review}</td>
                     <td>{ranking.start_date_time}</td>
                     <td>{ranking.end_date_time}</td>
